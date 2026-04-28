@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume</title>
+
+    <style>
+        body {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #222;
+            margin: 35px;
+        }
+
+        h1 {
+            font-size: 22pt;
+            margin-bottom: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .contact {
+            font-size: 11pt;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 13pt;
+            margin-top: 18px;
+            margin-bottom: 6px;
+            padding-left: 8px;
+            border-left: 4px solid #000;
+        }
+
+        p {
+            margin: 4px 0 8px 0;
+        }
+
+        .section {
+            margin-bottom: 8px;
+        }
+
+        .download-btn {
+            margin-top: 25px;
+            padding: 8px 16px;
+            font-size: 12pt;
+            border: 1px solid #000;
+            background: none;
+            cursor: pointer;
+        }
+
+        /* Print / PDF safety */
+        @page {
+            size: A4;
+            margin: 18mm;
+        }
+
+        @media print {
+            form {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>{{ data.name }}</h1>
+
+    <p class="contact">
+        {{ data.email }} | {{ data.phone }}<br>
+        {{ data.linkedin }}
+    </p>
+
+    <div class="section">
+        <h3>Career Objective</h3>
+        <p>{{ data.objective }}</p>
+    </div>
+
+    <div class="section">
+        <h3>Technical Skills</h3>
+        <p>{{ data.technical_skills }}</p>
+    </div>
+
+    <div class="section">
+        <h3>Soft Skills</h3>
+        <p>{{ data.soft_skills }}</p>
+    </div>
+
+    <div class="section">
+        <h3>Projects</h3>
+        <p>{{ data.projects }}</p>
+    </div>
+
+    <div class="section">
+        <h3>Internships</h3>
+        <p>{{ data.internships }}</p>
+    </div>
+
+    <div class="section">
+        <h3>Education</h3>
+        <p>{{ data.education }}</p>
+    </div>
+
+    {% if not is_pdf %}
+    <form method="POST" action="{% url 'three:download_resume' %}">
+        {% csrf_token %}
+        {% for key, value in data.items %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endfor %}
+        <button class="download-btn">Download PDF</button>
+    </form>
+    {% endif %}
+
+</body>
+</html>

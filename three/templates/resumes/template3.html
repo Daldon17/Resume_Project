@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Resume</title>
+
+<style>
+
+@page {
+    size: A4;
+    margin: 12mm;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #1f2937;
+    background: #fff;
+}
+
+
+.page {
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    box-sizing: border-box;
+
+  
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+.header {
+    text-align: center;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #111827;
+    margin-bottom: 8px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+}
+
+.contact {
+    margin-top: 3px;
+    font-size: 10.5px;
+    color: #4b5563;
+}
+
+
+.section {
+    margin-top: 8px;
+    page-break-inside: avoid;
+}
+
+
+.tag {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #111827;
+    border-left: 3px solid #111827;
+    padding-left: 6px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.content-box {
+    background: #f9fafb;
+    padding: 6px 9px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+}
+
+
+.content-box p {
+    margin: 3px 0;
+    text-align: justify;
+    font-size: 10.5px;
+    line-height: 1.35;
+}
+
+
+.download-btn {
+    margin-top: 8px;
+    padding: 7px 12px;
+    font-size: 11px;
+    border: none;
+    background: #111827;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* ===================== */
+/* PDF MODE FIX */
+/* ===================== */
+{% if is_pdf %}
+
+.download-btn {
+    display: none;
+}
+
+body {
+    background: white;
+}
+
+.page {
+    box-shadow: none;
+    height: auto;
+    overflow: visible;
+    transform: scale(0.97);
+    transform-origin: top;
+}
+
+{% endif %}
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>{{ data.name }}</h1>
+        <div class="contact">
+            {{ data.email }} | {{ data.phone }} | {{ data.linkedin }}
+        </div>
+    </div>
+
+    <!-- SECTIONS -->
+
+    <div class="section">
+        <div class="tag">Career Objective</div>
+        <div class="content-box">
+            <p>{{ data.objective }}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="tag">Technical Skills</div>
+        <div class="content-box">
+            <p>{{ data.technical_skills }}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="tag">Soft Skills</div>
+        <div class="content-box">
+            <p>{{ data.soft_skills }}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="tag">Projects</div>
+        <div class="content-box">
+            <p>{{ data.projects }}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="tag">Internships</div>
+        <div class="content-box">
+            <p>{{ data.internships }}</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="tag">Education</div>
+        <div class="content-box">
+            <p>{{ data.education }}</p>
+        </div>
+    </div>
+
+    <!-- DOWNLOAD BUTTON -->
+    {% if not is_pdf %}
+    <form method="POST" action="{% url 'three:download_resume' %}">
+        {% csrf_token %}
+        {% for key, value in data.items %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endfor %}
+        <button class="download-btn">Download PDF</button>
+    </form>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

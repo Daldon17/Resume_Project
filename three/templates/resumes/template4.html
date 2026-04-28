@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial; font-size: 14px; margin: 15px; }
+        h2 { margin-bottom: 0; }
+        h4 { margin-bottom: 5px; }
+        .section { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<h2>{{ data.name }}</h2>
+<p>{{ data.email }} | {{ data.phone }} | {{ data.linkedin }}</p>
+
+<div class="section">
+    <h4>Objective</h4>
+    <p>{{ data.objective }}</p>
+</div>
+
+<div class="section">
+    <h4>Skills</h4>
+    <p>{{ data.technical_skills }}</p>
+</div>
+
+<div class="section">
+    <h4>Projects</h4>
+    <p>{{ data.projects }}</p>
+</div>
+
+<div class="section">
+    <h4>Internships</h4>
+    <p>{{ data.internships }}</p>
+</div>
+
+<div class="section">
+    <h4>Education</h4>
+    <p>{{ data.education }}</p>
+</div>
+
+<div class="section">
+    <h4>Languages</h4>
+    <p>{{ data.languages }}</p>
+</div>
+
+{% if not is_pdf %}
+<form method="POST" action="{% url 'three:download_resume' %}">
+    {% csrf_token %}
+    {% for key, value in data.items %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+    {% endfor %}
+    <button>Download PDF</button>
+</form>
+{% endif %}
+
+</body>
+</html>
