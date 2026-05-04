@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+@page {
+    size: A4;
+    margin: 18mm;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 12px;
+    margin: 0;
+    color: #222;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+/* HEADER */
+.header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.contact {
+    font-size: 11px;
+    color: #555;
+    margin-top: 4px;
+}
+
+/* TABLE LAYOUT (PDF SAFE) */
+.layout {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.layout td {
+    vertical-align: top;
+}
+
+/* LEFT COLUMN */
+.left {
+    width: 32%;
+    padding-right: 15px;
+}
+
+/* RIGHT COLUMN */
+.right {
+    width: 68%;
+}
+
+/* SECTION */
+.section {
+    margin-bottom: 16px;
+}
+
+.section h3 {
+    font-size: 13px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 3px;
+    text-transform: uppercase;
+}
+
+.section p {
+    margin: 0;
+    text-align: left;
+}
+
+/* LIST STYLE */
+ul {
+    margin: 5px 0 0 15px;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 3px;
+}
+
+/* BUTTON */
+.download-btn {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.download-btn button {
+    padding: 8px 14px;
+    font-size: 12px;
+    border: none;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+}
+
+@media print {
+    .download-btn {
+        display: none;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>{{ data.name }}</h1>
+        <div class="contact">
+            {{ data.email }} | {{ data.phone }} | {{ data.linkedin }}
+        </div>
+    </div>
+
+    <!-- TWO COLUMN (PDF SAFE) -->
+    <table class="layout">
+        <tr>
+
+            <!-- LEFT -->
+            <td class="left">
+
+                <div class="section">
+                    <h3>Technical Skills</h3>
+                    <p>{{ data.technical_skills }}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Soft Skills</h3>
+                    <p>{{ data.soft_skills }}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Languages</h3>
+                    <p>{{ data.languages }}</p>
+                </div>
+
+            </td>
+
+            <!-- RIGHT -->
+            <td class="right">
+
+                <div class="section">
+                    <h3>Career Objective</h3>
+                    <p>{{ data.objective }}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Projects</h3>
+                    <p>{{ data.projects }}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Internships</h3>
+                    <p>{{ data.internships }}</p>
+                </div>
+
+                <div class="section">
+                    <h3>Education</h3>
+                    <p>{{ data.education }}</p>
+                </div>
+
+            </td>
+
+        </tr>
+    </table>
+
+    <!-- DOWNLOAD BUTTON -->
+    {% if not is_pdf %}
+    <div class="download-btn">
+        <form method="POST" action="{% url 'three:download_resume' %}">
+            {% csrf_token %}
+            {% for key, value in data.items %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <button>Download PDF</button>
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

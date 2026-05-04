@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-size: 11px;
+            margin: 0;
+            color: #222;
+            line-height: 1.4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            margin: auto;
+            padding: 10px 12px;
+        }
+
+        /* HEADER */
+        .header {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 6px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .contact {
+            font-size: 10px;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        /* TABLE LAYOUT */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            vertical-align: top;
+            padding: 4px 0;
+        }
+
+        .left {
+            width: 25%;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 10.5px;
+            color: #000;
+        }
+
+        .right {
+            width: 75%;
+            text-align: justify;
+        }
+
+        /* DIVIDER */
+        .row {
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* BUTTON */
+        .download-btn {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .download-btn button {
+            padding: 6px 12px;
+            font-size: 11px;
+            border: none;
+            background: #000;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* SAFE PDF FIX */
+        * {
+            page-break-inside: avoid;
+        }
+
+        {% if is_pdf %}
+
+        body {
+            font-size: 10.5px;
+        }
+
+        .left {
+            width: 28%;
+        }
+
+        .right {
+            width: 72%;
+        }
+
+        {% endif %}
+
+        @media print {
+            .download-btn {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h2>{{ data.name }}</h2>
+        <div class="contact">
+            {{ data.email }} | {{ data.phone }} | {{ data.linkedin }}
+        </div>
+    </div>
+
+    <table>
+
+        <tr class="row">
+            <td class="left">Objective</td>
+            <td class="right">{{ data.objective }}</td>
+        </tr>
+
+        <tr class="row">
+            <td class="left">Technical Skills</td>
+            <td class="right">{{ data.technical_skills }}</td>
+        </tr>
+
+        <tr class="row">
+            <td class="left">Soft Skills</td>
+            <td class="right">{{ data.soft_skills }}</td>
+        </tr>
+
+        <tr class="row">
+            <td class="left">Projects</td>
+            <td class="right">{{ data.projects }}</td>
+        </tr>
+
+        <tr class="row">
+            <td class="left">Internships</td>
+            <td class="right">{{ data.internships }}</td>
+        </tr>
+
+        <tr class="row">
+            <td class="left">Education</td>
+            <td class="right">{{ data.education }}</td>
+        </tr>
+
+        <tr>
+            <td class="left">Languages</td>
+            <td class="right">{{ data.languages }}</td>
+        </tr>
+
+    </table>
+
+    <!-- DOWNLOAD BUTTON -->
+    {% if not is_pdf %}
+    <div class="download-btn">
+        <form method="POST" action="{% url 'three:download_resume' %}">
+            {% csrf_token %}
+            {% for key, value in data.items %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <button>Download PDF</button>
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
